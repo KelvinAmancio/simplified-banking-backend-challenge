@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Hyperf\Validation\Middleware\ValidationMiddleware;
 /**
  * This file is part of Hyperf.
  *
@@ -11,5 +13,6 @@ declare(strict_types=1);
  */
 return [
     'http' => [
+        ValidationMiddleware::class
     ],
 ];

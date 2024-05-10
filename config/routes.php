@@ -9,10 +9,12 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+use App\Controller\IndexController;
+use App\Controller\UserRegisterController;
 use Hyperf\HttpServer\Router\Router;
 
-Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
+Router::addRoute(['GET', 'POST', 'HEAD'], '/', IndexController::class);
 
-Router::get('/favicon.ico', function () {
-    return '';
-});
+Router::addRoute('POST', '/register', UserRegisterController::class);
+
+Router::get('/favicon.ico', fn () => '');
