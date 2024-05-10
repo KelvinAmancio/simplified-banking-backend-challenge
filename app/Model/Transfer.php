@@ -16,7 +16,7 @@ class Transfer extends Model
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'transfer';
+    protected ?string $table = 'transfers';
 
     /**
      * The attributes that are mass assignable.

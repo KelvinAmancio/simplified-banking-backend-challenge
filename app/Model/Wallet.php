@@ -16,7 +16,7 @@ class Wallet extends Model
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'wallet';
+    protected ?string $table = 'wallets';
 
     /**
      * The attributes that are mass assignable.
