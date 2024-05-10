@@ -16,15 +16,15 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 
 ### RNs (Regras de Negócio)
 
-- [ ] Para ambos tipos de usuário devem existir os campos:
-    - [ ] Nome Completo
-    - [ ] CPF_CNPJ
-    - [ ] e-mail
-    - [ ] Senha
+- [x] Para ambos tipos de usuário devem existir os campos:
+    - [x] Nome Completo
+    - [x] CPF_CNPJ
+    - [x] e-mail
+    - [x] Senha
 
-- [ ] Os seguintes campos devem ser únicos:
-    - [ ] CPF_CNPJ
-    - [ ] e-mail
+- [x] Os seguintes campos devem ser únicos:
+    - [x] CPF_CNPJ
+    - [x] e-mail
 
 - [ ] Lojistas só devem receber transferências, não devem enviar dinheiro
 
@@ -42,36 +42,36 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 
 - [ ] Deve ser utilizado token JWT para autenticação de usuários
 
-- [ ] Devem ser utilizadas migrations para gerar as tabelas do banco relacional (MySQL)
+- [x] Devem ser utilizadas migrations para gerar as tabelas do banco relacional (MySQL)
 
 - [ ] O envio de notificação (email, sms) deverá ser feito via background jobs
 
-- [ ] Devem ser criadas as seguintes tabelas no banco relacional:
-    - [ ] user
-        - [ ] uuid
-        - [ ] name
-        - [ ] cpf_cnpj
-        - [ ] email
-        - [ ] password
-        - [ ] created_at
-        - [ ] updated_at
+- [x] Devem ser criadas as seguintes tabelas no banco relacional:
+    - [x] user
+        - [x] uuid
+        - [x] name
+        - [x] cpf_cnpj
+        - [x] email
+        - [x] password
+        - [x] created_at
+        - [x] updated_at
 
-    - [ ] wallet
-        - [ ] uuid
-        - [ ] owner_id
-        - [ ] balance
-        - [ ] created_at
-        - [ ] updated_at
+    - [x] wallet
+        - [x] uuid
+        - [x] owner_id
+        - [x] balance
+        - [x] created_at
+        - [x] updated_at
 
-    - [ ] transfer
-        - [ ] uuid
-        - [ ] payer_id
-        - [ ] payee_id
-        - [ ] value
-        - [ ] authorized
-        - [ ] notification_sent
-        - [ ] created_at
-        - [ ] updated_at
+    - [x] transfer
+        - [x] uuid
+        - [x] payer_id
+        - [x] payee_id
+        - [x] value
+        - [x] authorized
+        - [x] notification_sent
+        - [x] created_at
+        - [x] updated_at
 
 - [ ] Devem ser criados as seguintes endpoints:
     - [ ] POST /transfer (realizar transferência entre usuários)
