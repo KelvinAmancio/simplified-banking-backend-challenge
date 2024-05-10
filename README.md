@@ -17,14 +17,14 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 ### RNs (Regras de Negócio)
 
 - [ ] Para ambos tipos de usuário devem existir os campos:
-    - [] Nome Completo
-    - [] CPF_CNPJ
-    - [] e-mail
-    - [] Senha
+    - [ ] Nome Completo
+    - [ ] CPF_CNPJ
+    - [ ] e-mail
+    - [ ] Senha
 
 - [ ] Os seguintes campos devem ser únicos:
-    - [] CPF_CNPJ
-    - [] e-mail
+    - [ ] CPF_CNPJ
+    - [ ] e-mail
 
 - [ ] Lojistas só devem receber transferências, não devem enviar dinheiro
 
