@@ -14,6 +14,12 @@ LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MI
 # --build-arg timezone=America/Sao_Paulo
 ARG timezone
 
+ARG USER=1000
+ARG GROUP=1000
+# ARG UGNAME=docker
+
+RUN adduser ${USER} ${GROUP} -D
+
 ENV TIMEZONE=${timezone:-"America/Sao_Paulo"} \
     APP_ENV=prod \
     SCAN_CACHEABLE=(true)
@@ -23,7 +29,7 @@ COPY xdebug.ini /etc/php83/conf.d/00_xdebug.ini
 # update
 RUN set -ex \
     && apk update \
-    && apk add php83-xdebug \
+    && apk add php83-xdebug make \
     # show php version and extensions
     && php -v \
     && php -m \
@@ -44,15 +50,10 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
 
+RUN chown -R ${USER}:${GROUP} /usr/local/bin/composer
+
+USER ${USER}
+
 WORKDIR /opt/www
 
-# Composer Cache
-# COPY ./composer.* /opt/www/
-# RUN composer install --no-dev --no-scripts
-
-COPY . /opt/www
-RUN composer install --no-dev -o && php bin/hyperf.php
-
 EXPOSE 9501
-
-ENTRYPOINT ["php", "/opt/www/bin/hyperf.php", "start"]

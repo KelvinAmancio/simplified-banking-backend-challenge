@@ -2,9 +2,12 @@ services:
 
   main:
     build:
-      context: ./local
+      context: local/
+      args:
+        USER: ${UID:-1000}
+        GROUP: ${UID:-1000}
     container_name: main
-    # image: hyperf-skeleton
+    command: tail -f /dev/null
     volumes:
       - ./:/opt/www
     ports:

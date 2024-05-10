@@ -6,5 +6,9 @@ down:
 	docker compose down
 exec:
 	docker compose exec main bash
+install:
+	composer install
+start:
+	php /opt/www/bin/hyperf.php start
 migrate:
-	docker compose run main bash php bin/hyperf.php migrate
+	php bin/hyperf.php migrate
