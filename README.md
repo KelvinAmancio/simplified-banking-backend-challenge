@@ -8,7 +8,7 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 
 - [ ] Deve ser possível realizar transferências de dinheiro entre usuários
 
-- [ ] Deve ser possível ter 2 tipos de usuários (comuns e lojistas)
+- [x] Deve ser possível ter 2 tipos de usuários (comuns e lojistas)
 
 - [ ] Deve ser possível usuários terem carteira com dinheiro e realizam transferências entre eles
 
@@ -40,7 +40,7 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 
 - [ ] O serviço implementado deve ser RESTFul
 
-- [ ] Deve ser utilizado token JWT para autenticação de usuários
+- [x] Deve ser utilizado token JWT para autenticação de usuários
 
 - [x] Devem ser utilizadas migrations para gerar as tabelas do banco relacional (MySQL)
 
@@ -77,5 +77,5 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
     - [ ] POST /transfer (realizar transferência entre usuários)
     - [ ] GET /wallet (obter valor da carteira de um usuário)
     - [ ] GET /summary (obter histórico de transferências paginado de um usuário)
-    - [ ] POST /register (cadastrar um novo usuário com uma carteira)
-    - [ ] POST /login (efetuar login de um usuário)
+    - [x] POST /register (cadastrar um novo usuário com uma carteira)
+    - [x] POST /login (efetuar login de um usuário)
