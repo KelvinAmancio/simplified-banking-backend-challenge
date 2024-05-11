@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Hyperf\Database\Model\Concerns\HasUlids;
-use Hyperf\DbConnection\Model\Model;
 
 /**
  */
@@ -34,6 +33,10 @@ class Wallet extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [];
+
+    protected array $attributes = [
+        'balance' => 0
+    ];
 
     protected string $primaryKey = 'uuid';
 

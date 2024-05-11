@@ -12,24 +12,23 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\User;
-use App\Request\UserRegisterRequest;
-use Hyperf\HttpServer\Contract\ResponseInterface;
-use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
+use App\Request\UserRegisterRequest as Request;
+use App\UseCase\UserRegister;
+use Hyperf\HttpServer\Contract\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface as ResponseInterface;
 
 class UserRegisterController extends AbstractController
 {
-    public function __invoke(
-        UserRegisterRequest $request,
-        ResponseInterface $response
-    ): Psr7ResponseInterface {
-        $validated = $request->validated();
+    public function __construct(private UserRegister $userRegister)
+    {
+    }
 
-        $user = new User($validated);
-        $uuid = $user->newUniqueId();
-        $user->setAttribute('uuid', $uuid);
-        $user->save();
+    public function __invoke(Request $request, Response $response): ResponseInterface
+    {
+        $validatedUserData = $request->validated();
 
-        return $response->json(User::query()->find($uuid)->toArray());
+        $savedUserData = $this->userRegister->execute($validatedUserData);
+
+        return $response->json($savedUserData);
     }
 }

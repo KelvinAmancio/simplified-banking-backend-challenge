@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Hyperf\Database\Model\Concerns\HasUlids;
-use Hyperf\DbConnection\Model\Model;
 
 /**
  */

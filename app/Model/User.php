@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Hyperf\Database\Model\Concerns\HasUlids;
-use Hyperf\DbConnection\Model\Model;
 
 /**
  */
@@ -40,4 +39,9 @@ class User extends Model
     protected string $primaryKey = 'uuid';
 
     protected string $keyType = 'string';
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'owner_id', 'uuid');
+    }
 }

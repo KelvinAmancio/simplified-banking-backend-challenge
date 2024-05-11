@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Hyperf\HttpServer\Contract\ResponseInterface;
-use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 
 class IndexController extends AbstractController
 {
-    public function __invoke(ResponseInterface $response): Psr7ResponseInterface
+    public function __invoke(ResponseInterface $response): PsrResponseInterface
     {
         $user = $this->request->input('user', 'Hyperf');
         $method = $this->request->getMethod();
