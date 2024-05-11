@@ -12,18 +12,22 @@ declare(strict_types=1);
 
 namespace Test\Cases;
 
+use App\Model\User;
 use App\Service\Auth;
+use App\Service\JwtWrapper;
 use Test\HttpTestCase;
 
 class UserRegisterTest extends HttpTestCase
 {
     private Auth $auth;
+    private JwtWrapper $jwtWrapper;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->auth = $this->container->get(Auth::class);
+        $this->jwtWrapper = $this->container->get(JwtWrapper::class);
     }
 
     public function testUserRegisterWithoutAnyFieldsError()
@@ -56,9 +60,8 @@ class UserRegisterTest extends HttpTestCase
 
         $decodedResponse = json_decode($resp->getContent(), true);
         $user = $decodedResponse['user'];
+        $token = $decodedResponse['token'];
         $wallet = $decodedResponse['wallet'];
-
-        // var_dump($decodedResponse);
 
         $this->assertEquals(200, $resp->getStatusCode());
 
@@ -68,6 +71,10 @@ class UserRegisterTest extends HttpTestCase
 
         $verifiedPassword = $this->auth->verifyPassword($userData['password'], $user['password']);
         $this->assertTrue($verifiedPassword);
+
+        $jwtInfo = $this->jwtWrapper->decode($token);
+        $this->assertEquals($user['uuid'], $jwtInfo->user_uuid);
+        $this->assertEquals(User::TYPE_PF, $jwtInfo->user_type);
 
         $this->assertEquals($user['uuid'], $wallet['owner_id']);
         $this->assertEquals(0, $wallet['balance']);

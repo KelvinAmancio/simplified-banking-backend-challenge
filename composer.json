@@ -12,6 +12,7 @@
     "description": "A repo for a simplified banking backend challenge.",
     "require": {
         "php": ">=8.1",
+        "firebase/php-jwt": "^6.10",
         "hyperf/async-queue": "~3.1.0",
         "hyperf/cache": "~3.1.0",
         "hyperf/command": "~3.1.0",

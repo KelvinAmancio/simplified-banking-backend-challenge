@@ -30,4 +30,7 @@ return [
             LogLevel::WARNING,
         ],
     ],
+    // JWT
+    'jwt_secret' => env('APP_SECRET', 'app_secret'),
+    'jwt_token_expires' => 1800,
 ];
