@@ -16,7 +16,15 @@ use Hyperf\HttpServer\Router\Router;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', IndexController::class);
 
+// cadastro e login de usuários
 Router::addRoute('POST', '/register', UserRegisterController::class);
 Router::addRoute('POST', '/login', UserLoginController::class);
+
+// efetuar e listar transferências
+Router::addRoute('POST', '/transfer', IndexController::class);
+Router::addRoute('GET', '/summary', IndexController::class);
+
+// obter dados da carteira
+Router::addRoute('GET', '/wallet', IndexController::class);
 
 Router::get('/favicon.ico', fn () => '');
