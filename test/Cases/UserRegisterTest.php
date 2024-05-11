@@ -10,11 +10,11 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace HyperfTest\Cases;
+namespace Test\Cases;
 
-use Hyperf\Testing\TestCase;
+use Test\HttpTestCase;
 
-class UserRegisterTest extends TestCase
+class UserRegisterTest extends HttpTestCase
 {
     public function testUserRegisterWithoutAnyFieldsError()
     {

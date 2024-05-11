@@ -22,7 +22,7 @@ return [
             'class' => Monolog\Formatter\LineFormatter::class,
             'constructor' => [
                 'format' => null,
-                'dateFormat' => 'Y-m-d H:i:s',
+                'dateFormat' => 'Y-m-d H:i:s.u',
                 'allowInlineLineBreaks' => true,
             ],
         ],

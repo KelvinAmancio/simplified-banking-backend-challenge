@@ -10,6 +10,9 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
+    App\Listener\DbQueryExecutedListener::class,
+    App\Listener\QueueHandleListener::class,
+    App\Listener\ResumeExitCoordinatorListener::class,
     Hyperf\ExceptionHandler\Listener\ErrorExceptionHandler::class,
     Hyperf\Command\Listener\FailToHandleListener::class,
 ];

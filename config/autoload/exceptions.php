@@ -16,8 +16,8 @@ use Hyperf\HttpServer\Exception\Handler\HttpExceptionHandler;
 return [
     'handler' => [
         'http' => [
-            HttpExceptionHandler::class,
             ValidationExceptionHandler::class,
+            HttpExceptionHandler::class,
             AppExceptionHandler::class,
         ],
     ],
