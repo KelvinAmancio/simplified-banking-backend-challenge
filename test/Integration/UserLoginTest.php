@@ -10,14 +10,14 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace Test\Cases;
+namespace Test\Integration;
 
 use App\Model\User;
 use App\Service\Auth;
 use App\Service\JwtWrapper;
 use Test\HttpTestCase;
 
-class UserRegisterTest extends HttpTestCase
+class UserLoginTest extends HttpTestCase
 {
     private Auth $auth;
     private JwtWrapper $jwtWrapper;
@@ -30,24 +30,22 @@ class UserRegisterTest extends HttpTestCase
         $this->jwtWrapper = $this->container->get(JwtWrapper::class);
     }
 
-    public function testUserRegisterWithoutAnyFieldsError()
+    public function testUserLoginWithoutAnyFieldsError()
     {
         $userData = [];
         $expectedResponse = [
-            'name' => ['validation.required'],
             'email' => ['validation.required'],
-            'cpf_cnpj' => ['validation.required'],
             'password' => ['validation.required'],
         ];
 
-        $resp = $this->post('/register', $userData);
+        $resp = $this->post('/login', $userData);
 
         $decodedResponse = json_decode($resp->getContent(), true);
         $this->assertEquals(422, $resp->getStatusCode());
         $this->assertEquals($expectedResponse, $decodedResponse['details']);
     }
 
-    public function testUserRegisterSuccess()
+    public function testUserLoginSuccess()
     {
         $userData = [
             'name' => 'Kelvin Amancio',
@@ -56,27 +54,33 @@ class UserRegisterTest extends HttpTestCase
             'password' => '123456abc',
         ];
 
-        $resp = $this->post('/register', $userData);
+        $userLoginData = [
+            'email' => $userData['email'],
+            'password' => $userData['password'],
+        ];
+
+        $user = $this->createUser($userData);
+
+        $resp = $this->post('/login', $userLoginData);
 
         $decodedResponse = json_decode($resp->getContent(), true);
-        $user = $decodedResponse['user'];
         $token = $decodedResponse['token'];
-        $wallet = $decodedResponse['wallet'];
 
         $this->assertEquals(200, $resp->getStatusCode());
-
-        $this->assertEquals($userData['name'], $user['name']);
-        $this->assertEquals($userData['email'], $user['email']);
-        $this->assertEquals($userData['cpf_cnpj'], $user['cpf_cnpj']);
-
-        $verifiedPassword = $this->auth->verifyPassword($userData['password'], $user['password']);
-        $this->assertTrue($verifiedPassword);
 
         $jwtInfo = $this->jwtWrapper->decode($token);
         $this->assertEquals($user['uuid'], $jwtInfo->user_uuid);
         $this->assertEquals(User::TYPE_PF, $jwtInfo->user_type);
+    }
 
-        $this->assertEquals($user['uuid'], $wallet['owner_id']);
-        $this->assertEquals(0, $wallet['balance']);
+    private function createUser(array $userData): array
+    {
+        $userAttributes = [
+            ...$userData,
+            'uuid' => User::buildUuid(),
+            'password' => $this->auth->hashPassword($userData['password'])
+        ];
+
+        return User::create($userAttributes)->toArray();
     }
 }

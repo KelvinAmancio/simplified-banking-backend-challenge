@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace Test\Cases;
+namespace Test\Integration;
 
 use App\Model\Transfer;
 use App\Model\User;

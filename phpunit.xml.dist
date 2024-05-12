@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="./test/bootstrap.php" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false"
+  bootstrap="./test/bootstrap.php" colors="true" processIsolation="false" stopOnFailure="false"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+  cacheDirectory=".phpunit.cache" backupStaticProperties="false">
   <testsuites>
-    <testsuite name="Tests">
-      <directory suffix="Test.php">./test</directory>
+    <testsuite name="all">
+      <directory>./test</directory>
+    </testsuite>
+    <testsuite name="u">
+      <directory>test/Unit</directory>
+    </testsuite>
+    <testsuite name="i">
+      <directory>test/Integration</directory>
     </testsuite>
   </testsuites>
   <php>
-    <env name="APP_ENV" value="testing" force="true"/>
+    <env name="APP_ENV" value="testing" force="true" />
   </php>
   <source>
     <include>
       <directory suffix=".php">./app</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">./app/Constants</directory>
+      <directory suffix=".php">./app/Event</directory>
+      <directory suffix=".php">./app/Exception</directory>
+      <directory suffix=".php">./app/Request</directory>
+    </exclude>
   </source>
 </phpunit>
