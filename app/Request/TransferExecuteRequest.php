@@ -23,8 +23,8 @@ class TransferExecuteRequest extends FormRequest
     {
         return [
             'value' => 'required|numeric|min:0',
-            'payer' => 'required|string',
-            'payee' => 'required|string',
+            'payer' => 'required|string|different:payee',
+            'payee' => 'required|string|different:payer',
         ];
     }
 }
