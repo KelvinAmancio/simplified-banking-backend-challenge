@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Exception\Handler;
 
+use App\Exception\BusinessException;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
@@ -26,9 +27,25 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
-        $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
-        $this->logger->error($throwable->getTraceAsString());
-        return $response->withHeader('Server', 'Hyperf')->withStatus(500)->withBody(new SwooleStream('Internal Server Error.'));
+        if ($throwable instanceof BusinessException) {
+            $this->stopPropagation();
+
+            if (!$response->hasHeader('content-type')) {
+                $response = $response
+                    ->withAddedHeader('content-type', 'application/json; charset=utf-8');
+            }
+
+            $error = [
+                'code' => 400,
+                'message' => $throwable->getMessage(),
+            ];
+
+            return $response
+                ->withStatus($error['code'])
+                ->withBody(new SwooleStream(json_encode($error, JSON_UNESCAPED_UNICODE)));
+        }
+
+        return $response;
     }
 
     public function isValid(Throwable $throwable): bool

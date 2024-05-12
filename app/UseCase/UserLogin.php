@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase;
 
+use App\Exception\BusinessException;
 use App\Model\User;
 use App\Service\Auth;
 use App\Service\JwtWrapper;
@@ -16,21 +17,12 @@ class UserLogin
 
     public function execute(array $userData): array
     {
-        try {
-            return $this->getToken($userData['email'], $userData['password']);
-        } catch (\Throwable $th) {
-            throw new \Exception("N'ao foi poss[ivel fazer login");
-        }
-    }
+        $user = User::where('email', $userData['email'])->firstOrFail()->toArray();
 
-    private function getToken(string $email, string $password): array
-    {
-        $user = User::where('email', $email)->firstOrFail()->toArray();
-
-        $isValidPassword = $this->auth->verifyPassword($password, $user['password']);
+        $isValidPassword = $this->auth->verifyPassword($userData['password'], $user['password']);
 
         if (!$isValidPassword) {
-            throw new \Exception("N'ao foi poss[ivel fazer login");
+            throw new BusinessException("Não foi possível fazer login");
         }
 
         $userToken = $this->buildUserToken($user['uuid'], $user['cpf_cnpj']);

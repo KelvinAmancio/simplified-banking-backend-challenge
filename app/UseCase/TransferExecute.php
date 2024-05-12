@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UseCase;
 
 use App\Event\TransferReceivedEvent;
+use App\Exception\BusinessException;
 use App\Model\Transfer;
 use App\Model\User;
 use App\Model\Wallet;
@@ -77,11 +78,11 @@ class TransferExecute
     private function validatePayerRequirements(array $payer, float $transferValue): void
     {
         if ($payer['balance'] < $transferValue) {
-            throw new \Exception("Balance unavailable for this transfer");
+            throw new BusinessException("Balance unavailable for this transfer");
         }
 
         if (User::isTypePJ($payer['cpf_cnpj'])) {
-            throw new \Exception("User not authorized to make this transfer");
+            throw new BusinessException("User not authorized to make this transfer");
         }
     }
 
@@ -96,7 +97,7 @@ class TransferExecute
 
         return !empty($response['authorized'])
             ? $response
-            : throw new \Exception("Transfer not authorized");
+            : throw new BusinessException("Transfer not authorized");
     }
 
     private function notifyPayee(array $transferData): void

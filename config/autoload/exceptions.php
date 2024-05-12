@@ -17,8 +17,8 @@ return [
     'handler' => [
         'http' => [
             ValidationExceptionHandler::class,
-            HttpExceptionHandler::class,
             AppExceptionHandler::class,
+            HttpExceptionHandler::class,
         ],
     ],
 ];

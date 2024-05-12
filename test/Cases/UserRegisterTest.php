@@ -44,7 +44,7 @@ class UserRegisterTest extends HttpTestCase
 
         $decodedResponse = json_decode($resp->getContent(), true);
         $this->assertEquals(422, $resp->getStatusCode());
-        $this->assertEquals($expectedResponse, $decodedResponse);
+        $this->assertEquals($expectedResponse, $decodedResponse['details']);
     }
 
     public function testUserRegisterSuccess()

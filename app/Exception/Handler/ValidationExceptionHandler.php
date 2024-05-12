@@ -23,15 +23,22 @@ class ValidationExceptionHandler extends BaseValidationExceptionHandler
     public function handle(Throwable $throwable, ResponsePlusInterface $response)
     {
         $this->stopPropagation();
+
         /** @var ValidationException $throwable */
         $body = $throwable->validator->errors();
-        $encodedBody = json_encode($body);
 
-        if (! $response->hasHeader('content-type')) {
-            $response = $response->addHeader('content-type', 'application/json; charset=utf-8');
+        if (!$response->hasHeader('content-type')) {
+            $response = $response
+                ->withAddedHeader('content-type', 'application/json; charset=utf-8');
         }
 
-        return $response->setStatus($throwable->status)->setBody(new SwooleStream($encodedBody));
+        $erros = json_encode([
+            'code' => $throwable->status,
+            'message' => 'Validation Error',
+            'details' => $body->getMessages(),
+        ], JSON_UNESCAPED_UNICODE);
+
+        return $response->withStatus($throwable->status)->withBody(new SwooleStream($erros));
     }
 
     public function isValid(Throwable $throwable): bool
