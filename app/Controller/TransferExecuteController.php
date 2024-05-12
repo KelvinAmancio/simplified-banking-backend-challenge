@@ -25,7 +25,10 @@ class TransferExecuteController extends AbstractController
 
     public function __invoke(Request $request, Response $response): ResponseInterface
     {
+        $payerAuthData = $request->getAttribute('auth');
+
         $validatedTransferData = $request->validated();
+        $validatedTransferData['payer'] = $payerAuthData['user_uuid'];
 
         $savedTransferData = $this->transferExecute->execute($validatedTransferData);
 

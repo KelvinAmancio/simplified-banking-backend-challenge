@@ -36,7 +36,7 @@ class TransferExecute
 
         [$payer, $payee] = $this->getUsersWallets($transferData);
 
-        $this->validatePayerRequirements($payer, $transferValue);
+        $this->validatePayerBalance($payer, $transferValue);
 
         $this->updateBalance($payer['uuid'], $payer['balance'] - $transferValue);
 
@@ -75,14 +75,10 @@ class TransferExecute
         ];
     }
 
-    private function validatePayerRequirements(array $payer, float $transferValue): void
+    private function validatePayerBalance(array $payer, float $transferValue): void
     {
         if ($payer['balance'] < $transferValue) {
             throw new BusinessException("Balance unavailable for this transfer");
-        }
-
-        if (User::isTypePJ($payer['cpf_cnpj'])) {
-            throw new BusinessException("User not authorized to make this transfer");
         }
     }
 

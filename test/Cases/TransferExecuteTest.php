@@ -16,6 +16,7 @@ use App\Model\Transfer;
 use App\Model\User;
 use App\Model\Wallet;
 use App\Service\Auth;
+use App\Service\JwtWrapper;
 use App\Service\TransferAuthorizer;
 use App\Service\TransferReceivedNotifier;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,6 +25,8 @@ use Test\HttpTestCase;
 class TransferExecuteTest extends HttpTestCase
 {
     private Auth $auth;
+
+    private JwtWrapper $jwtWrapper;
 
     /** @var MockObject&TransferAuthorizer */
     private MockObject $mockedTransferAuthorizer;
@@ -39,6 +42,7 @@ class TransferExecuteTest extends HttpTestCase
         $this->container->set(TransferAuthorizer::class, $this->mockedTransferAuthorizer);
 
         $this->auth = $this->container->get(Auth::class);
+        $this->jwtWrapper = $this->container->get(JwtWrapper::class);
     }
 
     public function testTransferExecuteWithoutAnyFieldsError()
@@ -46,7 +50,6 @@ class TransferExecuteTest extends HttpTestCase
         $userData = [];
         $expectedResponse = [
             'value' => ['validation.required'],
-            'payer' => ['validation.required'],
             'payee' => ['validation.required'],
         ];
 
@@ -86,7 +89,6 @@ class TransferExecuteTest extends HttpTestCase
 
         $transferData = [
             'value' => $transferValue,
-            'payer' => $payer['uuid'],
             'payee' => $payee['uuid'],
         ];
 
@@ -94,10 +96,12 @@ class TransferExecuteTest extends HttpTestCase
             ->mockedTransferAuthorizer
             ->expects($this->once())
             ->method('execute')
-            ->with($transferData)
+            ->with([...$transferData, 'payer' => $payer['uuid']])
             ->willReturn(['authorized' => true]);
 
-        $resp = $this->post('/transfer', $transferData);
+        $headers = ['Authorization' => $this->buildUserToken($payer)];
+
+        $resp = $this->post('/transfer', $transferData, $headers);
 
         $decodedResponse = json_decode($resp->getContent(), true);
 
@@ -134,5 +138,15 @@ class TransferExecuteTest extends HttpTestCase
         Wallet::create($walletData)->toArray();
 
         return $user;
+    }
+
+    private function buildUserToken(array $userData): string
+    {
+        $tokenData = [
+            'user_uuid' => $userData['uuid'],
+            'user_type' => User::getType($userData['cpf_cnpj'])
+        ];
+
+        return 'Bearer ' . $this->jwtWrapper->encode($tokenData);
     }
 }

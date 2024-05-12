@@ -13,6 +13,8 @@ use App\Controller\IndexController;
 use App\Controller\TransferExecuteController;
 use App\Controller\UserLoginController;
 use App\Controller\UserRegisterController;
+use App\Middleware\AllowedToTransferMiddleware;
+use App\Middleware\Auth\LoggedInUserMiddleware;
 use Hyperf\HttpServer\Router\Router;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', IndexController::class);
@@ -21,11 +23,25 @@ Router::addRoute(['GET', 'POST', 'HEAD'], '/', IndexController::class);
 Router::addRoute('POST', '/register', UserRegisterController::class);
 Router::addRoute('POST', '/login', UserLoginController::class);
 
-// efetuar e listar transferências
-Router::addRoute('POST', '/transfer', TransferExecuteController::class);
-Router::addRoute('GET', '/summary', IndexController::class);
+// rotas apenas para usuários logados
+Router::addGroup(
+    '', function () {
+        // efetuar transferências
+        Router::addRoute(
+            'POST',
+            '/transfer',
+            TransferExecuteController::class,
+            ['middleware' => [AllowedToTransferMiddleware::class]]
+        );
 
-// obter dados da carteira
-Router::addRoute('GET', '/wallet', IndexController::class);
+        // listar transferências
+        Router::addRoute('GET', '/summary', IndexController::class);
+
+        // obter dados da carteira
+        Router::addRoute('GET', '/wallet', IndexController::class);
+    },
+    ['middleware' => [LoggedInUserMiddleware::class]]
+);
+
 
 Router::get('/favicon.ico', fn () => '');
