@@ -37,6 +37,11 @@ class Transfer extends Model
      */
     protected array $casts = [];
 
+    protected array $attributes = [
+        'authorized' => false,
+        'notification_sent' => false,
+    ];
+
     protected string $primaryKey = 'uuid';
 
     protected string $keyType = 'string';

@@ -53,4 +53,9 @@ class User extends Model
     {
         return strlen($cpfCnpj) == 14 ? self::TYPE_PF : self::TYPE_PJ;
     }
+
+    public static function isTypePJ(string $cpfCnpj): bool
+    {
+        return strlen($cpfCnpj) > 14;
+    }
 }

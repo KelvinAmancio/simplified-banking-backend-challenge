@@ -25,7 +25,7 @@ class UserLogin
 
     private function getToken(string $email, string $password): array
     {
-        $user = User::where('email', '=', $email)->firstOrFail()->toArray();
+        $user = User::where('email', $email)->firstOrFail()->toArray();
 
         $isValidPassword = $this->auth->verifyPassword($password, $user['password']);
 

@@ -33,4 +33,8 @@ return [
     // JWT
     'jwt_secret' => env('APP_SECRET', 'app_secret'),
     'jwt_token_expires' => 1800,
+    // Payment Received Notifier
+    'payment_received_notifier_base_uri' => env('PAYMENT_RECEIVED_NOTIFIER_BASE_URI', ''),
+    // Transfer Authorizer
+    'transfer_authorizer_base_uri' => env('TRANSFER_AUTHORIZER_BASE_URI', ''),
 ];
