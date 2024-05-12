@@ -9,15 +9,12 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-use App\Controller\IndexController;
 use App\Controller\TransferExecuteController;
 use App\Controller\UserLoginController;
 use App\Controller\UserRegisterController;
 use App\Middleware\AllowedToTransferMiddleware;
 use App\Middleware\Auth\LoggedInUserMiddleware;
 use Hyperf\HttpServer\Router\Router;
-
-Router::addRoute(['GET', 'POST', 'HEAD'], '/', IndexController::class);
 
 // cadastro e login de usuários
 Router::addRoute('POST', '/register', UserRegisterController::class);
@@ -35,10 +32,10 @@ Router::addGroup(
         );
 
         // listar transferências
-        Router::addRoute('GET', '/summary', IndexController::class);
+        // Router::addRoute('GET', '/summary', IndexController::class);
 
         // obter dados da carteira
-        Router::addRoute('GET', '/wallet', IndexController::class);
+        // Router::addRoute('GET', '/wallet', IndexController::class);
     },
     ['middleware' => [LoggedInUserMiddleware::class]]
 );
