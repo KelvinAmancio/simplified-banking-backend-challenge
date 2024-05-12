@@ -4,59 +4,56 @@ declare(strict_types=1);
 
 namespace App\UseCase;
 
-use App\Model\User;
-use App\Model\Wallet;
 use App\Service\Auth;
+use App\Service\Db\UserService;
+use App\Service\Db\WalletService;
 use App\Service\JwtWrapper;
 
 class UserRegister
 {
-    public function __construct(private Auth $auth, private JwtWrapper $jwtWrapper)
-    {
+    public function __construct(
+        private Auth $auth,
+        private JwtWrapper $jwtWrapper,
+        private UserService $userService,
+        private WalletService $walletService
+    ) {
     }
 
     public function execute(array $userData): array
     {
-        $user = $this->saveUser($userData);
-        $userToken = $this->buildUserToken($user['uuid'], $userData['cpf_cnpj']);
+        $userAndToken = $this->saveUserAndBuildToken($userData);
 
-        $wallet = $this->saveWallet($user['uuid']);
+        $walletData = [
+            'owner_id' => $userAndToken['user']['uuid']
+        ];
+
+        $wallet = $this->walletService->save($walletData);
 
         return [
-            'user' => $user,
-            'token' => $userToken,
+            ...$userAndToken,
             'wallet' => $wallet
         ];
     }
 
-    private function saveUser(array $userData): array
+    private function saveUserAndBuildToken(array $userData): array
     {
         $userAttributes = [
             ...$userData,
-            'uuid' => User::buildUuid(),
             'password' => $this->auth->hashPassword($userData['password'])
         ];
 
-        return User::create($userAttributes)->toArray();
-    }
+        $user = $this->userService->save($userAttributes);
 
-    private function saveWallet(string $userUuid): array
-    {
-        $walletData = [
-            'uuid' => Wallet::buildUuid(),
-            'owner_id' => $userUuid,
-        ];
-
-        return Wallet::create($walletData)->toArray();
-    }
-
-    private function buildUserToken(string $userUuid, string $cpfCnpj): string
-    {
         $tokenData = [
-            'user_uuid' => $userUuid,
-            'user_type' => User::getType($cpfCnpj)
+            'user_uuid' => $user['uuid'],
+            'user_type' => UserService::getType($userData['cpf_cnpj'])
         ];
 
-        return $this->jwtWrapper->encode($tokenData);
+        $token = $this->jwtWrapper->encode($tokenData);
+
+        return [
+            'user' => $user,
+            'token' => $token
+        ];
     }
 }

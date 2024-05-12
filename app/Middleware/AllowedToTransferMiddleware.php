@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Model\User;
+use App\Service\Db\UserService;
 use Hyperf\HttpMessage\Exception\UnauthorizedHttpException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -30,7 +30,7 @@ class AllowedToTransferMiddleware implements MiddlewareInterface
 
         $body = $request->getParsedBody();
 
-        if (User::TYPE_PJ === $payerAuth['user_type']) {
+        if (UserService::TYPE_PJ === $payerAuth['user_type']) {
             throw new UnauthorizedHttpException('User type not authorized to make this transfer');
         }
 

@@ -13,9 +13,6 @@ class User extends Model
 {
     use HasUlids;
 
-    public const TYPE_PF = 'PF';
-    public const TYPE_PJ = 'PJ';
-
     /**
      * The table associated with the model.
      */
@@ -47,15 +44,5 @@ class User extends Model
     public function wallet(): HasOne
     {
         return $this->hasOne(Wallet::class, 'owner_id', 'uuid');
-    }
-
-    public static function getType(string $cpfCnpj): string
-    {
-        return strlen($cpfCnpj) == 14 ? self::TYPE_PF : self::TYPE_PJ;
-    }
-
-    public static function isTypePJ(string $cpfCnpj): bool
-    {
-        return strlen($cpfCnpj) > 14;
     }
 }

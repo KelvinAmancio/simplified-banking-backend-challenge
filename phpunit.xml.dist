@@ -25,6 +25,7 @@
       <directory suffix=".php">./app/Constants</directory>
       <directory suffix=".php">./app/Event</directory>
       <directory suffix=".php">./app/Exception</directory>
+      <directory suffix=".php">./app/Model</directory>
       <directory suffix=".php">./app/Request</directory>
     </exclude>
   </source>

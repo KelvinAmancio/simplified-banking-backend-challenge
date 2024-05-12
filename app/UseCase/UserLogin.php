@@ -5,24 +5,27 @@ declare(strict_types=1);
 namespace App\UseCase;
 
 use App\Exception\BusinessException;
-use App\Model\User;
 use App\Service\Auth;
+use App\Service\Db\UserService;
 use App\Service\JwtWrapper;
 
 class UserLogin
 {
-    public function __construct(private Auth $auth, private JwtWrapper $jwtWrapper)
-    {
+    public function __construct(
+        private Auth $auth,
+        private JwtWrapper $jwtWrapper,
+        private UserService $userService
+    ) {
     }
 
     public function execute(array $userData): array
     {
-        $user = User::where('email', $userData['email'])->firstOrFail()->toArray();
+        $user = $this->userService->findByEmailOrFail($userData['email']);
 
         $isValidPassword = $this->auth->verifyPassword($userData['password'], $user['password']);
 
         if (!$isValidPassword) {
-            throw new BusinessException("Não foi possível fazer login");
+            throw new BusinessException('Não foi possível fazer login');
         }
 
         $userToken = $this->buildUserToken($user['uuid'], $user['cpf_cnpj']);
@@ -34,7 +37,7 @@ class UserLogin
     {
         $tokenData = [
             'user_uuid' => $userUuid,
-            'user_type' => User::getType($cpfCnpj)
+            'user_type' => UserService::getType($cpfCnpj)
         ];
 
         return $this->jwtWrapper->encode($tokenData);
