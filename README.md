@@ -6,13 +6,13 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 
 ### RFs (Requisitos Funcionais)
 
-- [ ] Deve ser possível realizar transferências de dinheiro entre usuários
+- [x] Deve ser possível realizar transferências de dinheiro entre usuários
 
 - [x] Deve ser possível ter 2 tipos de usuários (comuns e lojistas)
 
-- [ ] Deve ser possível usuários terem carteira com dinheiro e realizam transferências entre eles
+- [x] Deve ser possível usuários terem carteira com dinheiro e realizam transferências entre eles
 
-- [ ] Deve ser possível usuários realizarem transferências (enviar dinheiro) entre eles
+- [x] Deve ser possível usuários realizarem transferências (enviar dinheiro) entre eles
 
 ### RNs (Regras de Negócio)
 
@@ -26,25 +26,27 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
     - [x] CPF_CNPJ
     - [x] e-mail
 
-- [ ] Lojistas só devem receber transferências, não devem enviar dinheiro
+- [x] Lojistas só devem receber transferências, não devem enviar dinheiro
 
-- [ ] Deve ser validado se o usuário tem saldo antes da transferência
+- [x] Deve ser validado se o usuário tem saldo antes da transferência
 
-- [ ] Antes de finalizar a transferência, deve-se consultar um serviço autorizador externo (API mock)
+- [x] Antes de finalizar a transferência, deve-se consultar um serviço autorizador externo (API mock)
 
-- [ ] A operação de transferência deve ser uma transação (revertida em caso de inconsistência)
+- [x] A operação de transferência deve ser uma transação (revertida em caso de inconsistência)
 
-- [ ] No recebimento de pagamento, o usuário precisa receber notificação (email, sms) enviada por um serviço de terceiro (API mock)
+- [x] No recebimento de pagamento, o usuário precisa receber notificação (email, sms) enviada por um serviço de terceiro (API mock)
+
+- [x] Um usuário não deve enviar uma transferência para ele mesmo
 
 ### RNFs (Requisitos Não-Funcionais)
 
-- [ ] O serviço implementado deve ser RESTFul
+- [x] O serviço implementado deve ser RESTFul
 
 - [x] Deve ser utilizado token JWT para autenticação de usuários
 
 - [x] Devem ser utilizadas migrations para gerar as tabelas do banco relacional (MySQL)
 
-- [ ] O envio de notificação (email, sms) deverá ser feito via background jobs
+- [x] O envio de notificação (email, sms) deverá ser feito via event notification
 
 - [x] Devem ser criadas as seguintes tabelas no banco relacional:
     - [x] user
@@ -74,7 +76,7 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
         - [x] updated_at
 
 - [ ] Devem ser criados as seguintes endpoints:
-    - [ ] POST /transfer (realizar transferência entre usuários)
+    - [x] POST /transfer (realizar transferência entre usuários)
     - [ ] GET /wallet (obter valor da carteira de um usuário)
     - [ ] GET /summary (obter histórico de transferências paginado de um usuário)
     - [x] POST /register (cadastrar um novo usuário com uma carteira)
