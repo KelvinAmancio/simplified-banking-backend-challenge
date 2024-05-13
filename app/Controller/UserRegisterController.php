@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Request\UserRegisterRequest as Request;
 use App\UseCase\UserRegister;
 use Hyperf\HttpServer\Contract\ResponseInterface as Response;
-use Psr\Http\Message\ResponseInterface as ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class UserRegisterController extends AbstractController
 {

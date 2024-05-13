@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Request\TransferExecuteRequest as Request;
 use App\UseCase\TransferExecute;
 use Hyperf\HttpServer\Contract\ResponseInterface as Response;
-use Psr\Http\Message\ResponseInterface as ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class TransferExecuteController extends AbstractController
 {

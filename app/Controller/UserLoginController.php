@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Request\UserLoginRequest as Request;
 use App\UseCase\UserLogin;
 use Hyperf\HttpServer\Contract\ResponseInterface as Response;
-use Psr\Http\Message\ResponseInterface as ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class UserLoginController extends AbstractController
 {
