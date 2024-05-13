@@ -49,9 +49,9 @@ class UserLoginTest extends HttpTestCase
     public function testUserLoginSuccess()
     {
         $userData = [
-            'name' => 'Kelvin Amancio',
-            'email' => 'kelvi013@gmail.com',
-            'cpf_cnpj' => '456.158.948-14',
+            'name' => 'User Name',
+            'email' => 'email@email.com',
+            'cpf_cnpj' => '111.111.111-11',
             'password' => '123456abc',
         ];
 
