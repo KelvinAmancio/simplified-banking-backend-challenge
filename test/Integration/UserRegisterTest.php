@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Test\Integration;
 
-use App\Model\User;
 use App\Service\Auth;
+use App\Service\Db\UserService;
 use App\Service\JwtWrapper;
 use Test\HttpTestCase;
 
@@ -74,7 +74,7 @@ class UserRegisterTest extends HttpTestCase
 
         $jwtInfo = $this->jwtWrapper->decode($token);
         $this->assertEquals($user['uuid'], $jwtInfo->user_uuid);
-        $this->assertEquals(User::TYPE_PF, $jwtInfo->user_type);
+        $this->assertEquals(UserService::TYPE_PF, $jwtInfo->user_type);
 
         $this->assertEquals($user['uuid'], $wallet['owner_id']);
         $this->assertEquals(0, $wallet['balance']);

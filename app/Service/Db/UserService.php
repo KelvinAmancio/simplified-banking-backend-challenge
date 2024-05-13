@@ -26,6 +26,27 @@ class UserService
         return User::create($userAttributes)->toArray();
     }
 
+    public function getWithWallets(array $usersIds): array
+    {
+        [$payer, $payee] = User
+            ::query()
+            ->whereIn('uuid', $usersIds)
+            ->with('wallet')
+            ->get()
+            ->toArray();
+
+        return [
+            [
+                'uuid' => $payer['uuid'],
+                'balance' => $payer['wallet']['balance']
+            ],
+            [
+                'uuid' => $payee['uuid'],
+                'balance' => $payee['wallet']['balance']
+            ]
+        ];
+    }
+
     public static function getType(string $cpfCnpj): string
     {
         return strlen($cpfCnpj) == 14 ? self::TYPE_PF : self::TYPE_PJ;

@@ -17,4 +17,9 @@ class WalletService
 
         return Wallet::create($walletAttributes)->toArray();
     }
+
+    public function updateBalance(string $userUuid, float $balanceValue): void
+    {
+        Wallet::query()->where('owner_id', $userUuid)->update(['balance' => $balanceValue]);
+    }
 }

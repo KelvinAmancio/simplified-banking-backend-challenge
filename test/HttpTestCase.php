@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Test;
 
+use App\Helper\DbHelper;
 use Hyperf\Context\ApplicationContext;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
@@ -37,6 +38,7 @@ use Hyperf\Testing\TestCase;
 abstract class HttpTestCase extends TestCase
 {
     use DbQueryExecutedTestHandlerTrait;
+    use DbHelper;
 
     protected TestClient $client;
 

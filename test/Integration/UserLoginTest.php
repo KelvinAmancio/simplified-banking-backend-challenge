@@ -14,6 +14,7 @@ namespace Test\Integration;
 
 use App\Model\User;
 use App\Service\Auth;
+use App\Service\Db\UserService;
 use App\Service\JwtWrapper;
 use Test\HttpTestCase;
 
@@ -70,14 +71,14 @@ class UserLoginTest extends HttpTestCase
 
         $jwtInfo = $this->jwtWrapper->decode($token);
         $this->assertEquals($user['uuid'], $jwtInfo->user_uuid);
-        $this->assertEquals(User::TYPE_PF, $jwtInfo->user_type);
+        $this->assertEquals(UserService::TYPE_PF, $jwtInfo->user_type);
     }
 
     private function createUser(array $userData): array
     {
         $userAttributes = [
             ...$userData,
-            'uuid' => User::buildUuid(),
+            'uuid' => self::buildUuid(),
             'password' => $this->auth->hashPassword($userData['password'])
         ];
 

@@ -16,6 +16,7 @@ use App\Model\Transfer;
 use App\Model\User;
 use App\Model\Wallet;
 use App\Service\Auth;
+use App\Service\Db\UserService;
 use App\Service\JwtWrapper;
 use App\Service\TransferAuthorizer;
 use App\Service\TransferReceivedNotifier;
@@ -123,14 +124,14 @@ class TransferExecuteTest extends HttpTestCase
     {
         $userAttributes = [
             ...$userData,
-            'uuid' => User::buildUuid(),
+            'uuid' => self::buildUuid(),
             'password' => $this->auth->hashPassword($userData['password'])
         ];
 
         $user = User::create($userAttributes)->toArray();
 
         $walletData = [
-            'uuid' => Wallet::buildUuid(),
+            'uuid' => self::buildUuid(),
             'owner_id' => $user['uuid'],
             'balance' => 1000
         ];
@@ -144,7 +145,7 @@ class TransferExecuteTest extends HttpTestCase
     {
         $tokenData = [
             'user_uuid' => $userData['uuid'],
-            'user_type' => User::getType($userData['cpf_cnpj'])
+            'user_type' => UserService::getType($userData['cpf_cnpj'])
         ];
 
         return 'Bearer ' . $this->jwtWrapper->encode($tokenData);

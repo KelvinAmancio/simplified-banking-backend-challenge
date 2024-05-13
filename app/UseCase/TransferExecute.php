@@ -6,9 +6,9 @@ namespace App\UseCase;
 
 use App\Event\TransferReceivedEvent;
 use App\Exception\BusinessException;
-use App\Model\Transfer;
-use App\Model\User;
-use App\Model\Wallet;
+use App\Service\Db\TransferService;
+use App\Service\Db\UserService;
+use App\Service\Db\WalletService;
 use App\Service\TransferAuthorizer;
 use Hyperf\DbConnection\Db;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -17,7 +17,10 @@ class TransferExecute
 {
     public function __construct(
         private TransferAuthorizer $transferAuthorizer,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
+        private TransferService $transferService,
+        private UserService $userService,
+        private WalletService $walletService
     ) {
     }
 
@@ -30,61 +33,44 @@ class TransferExecute
         return ['transfer' => $transfer];
     }
 
-    private function makeTransfer(array $transferData): array
+    public function makeTransfer(array $transferData): array
     {
         $transferValue = $transferData['value'];
 
-        [$payer, $payee] = $this->getUsersWallets($transferData);
+        $usersIds = [
+            $transferData['payer'],
+            $transferData['payee'],
+        ];
+
+        [$payer, $payee] = $this->userService->getWithWallets($usersIds);
 
         $this->validatePayerBalance($payer, $transferValue);
 
-        $this->updateBalance($payer['uuid'], $payer['balance'] - $transferValue);
+        $this->walletService->updateBalance(
+            $payer['uuid'],
+            $payer['balance'] - $transferValue
+        );
 
-        $this->updateBalance($payee['uuid'], $payee['balance'] + $transferValue);
+        $this->walletService->updateBalance(
+            $payee['uuid'],
+            $payee['balance'] + $transferValue
+        );
 
         $this->authorizeTransfer($transferData);
 
         return $this->saveTransfer($payer['uuid'], $payee['uuid'], $transferValue);
     }
 
-    private function getUsersWallets(array $transferData): array
+    public function notifyPayee(array $transferData): void
     {
-        $usersIds = [
-            $transferData['payer'],
-            $transferData['payee']
-        ];
-
-        [$payer, $payee] = User
-            ::query()
-            ->whereIn('uuid', $usersIds)
-            ->with('wallet')
-            ->get()
-            ->toArray();
-
-        return [
-            [
-                'uuid' => $payer['uuid'],
-                'cpf_cnpj' => $payer['cpf_cnpj'],
-                'balance' => $payer['wallet']['balance'],
-            ],
-            [
-                'uuid' => $payee['uuid'],
-                'cpf_cnpj' => $payee['cpf_cnpj'],
-                'balance' => $payee['wallet']['balance'],
-            ],
-        ];
+        $this->eventDispatcher->dispatch(new TransferReceivedEvent($transferData));
     }
 
     private function validatePayerBalance(array $payer, float $transferValue): void
     {
         if ($payer['balance'] < $transferValue) {
-            throw new BusinessException("Balance unavailable for this transfer");
+            throw new BusinessException('Balance unavailable for this transfer');
         }
-    }
-
-    private function updateBalance(string $userUuid, float $balanceValue): void
-    {
-        Wallet::query()->where('owner_id', $userUuid)->update(['balance' => $balanceValue]);
     }
 
     private function authorizeTransfer(array $transferData): array
@@ -93,24 +79,18 @@ class TransferExecute
 
         return !empty($response['authorized'])
             ? $response
-            : throw new BusinessException("Transfer not authorized");
-    }
-
-    private function notifyPayee(array $transferData): void
-    {
-        $this->eventDispatcher->dispatch(new TransferReceivedEvent($transferData));
+            : throw new BusinessException('Transfer not authorized');
     }
 
     private function saveTransfer(string $payerUuid, string $payeeUuid, float $transferValue): array
     {
         $transferAttributes = [
-            'uuid' => Transfer::buildUuid(),
             'payer_id' => $payerUuid,
             'payee_id' => $payeeUuid,
             'value' => $transferValue,
             'authorized' => true
         ];
 
-        return Transfer::create($transferAttributes)->toArray();
+        return $this->transferService->save($transferAttributes);
     }
 }
