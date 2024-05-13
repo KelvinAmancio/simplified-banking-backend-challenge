@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Event\TransferReceivedEvent;
-use App\Model\Transfer;
+use App\Service\Db\TransferService;
 use App\Service\TransferReceivedNotifier;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
@@ -23,10 +23,12 @@ use Psr\Container\ContainerInterface;
 class TransferReceivedListener implements ListenerInterface
 {
     private TransferReceivedNotifier $transferReceivedNotifier;
+    private TransferService $transferService;
 
     public function __construct(ContainerInterface $container)
     {
         $this->transferReceivedNotifier = $container->get(TransferReceivedNotifier::class);
+        $this->transferService = $container->get(TransferService::class);
     }
 
     public function listen(): array
@@ -42,9 +44,9 @@ class TransferReceivedListener implements ListenerInterface
 
         $notificationResult = $this->transferReceivedNotifier->execute($transferData);
 
-        Transfer
-            ::query()
-            ->find($transferData['uuid'])
-            ->update(['notification_sent' => !empty($notificationResult)]);
+        $this->transferService->updateTransferNotificationSent(
+            $transferData['uuid'],
+            $notificationResult
+        );
     }
 }

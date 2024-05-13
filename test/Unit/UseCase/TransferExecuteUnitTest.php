@@ -232,7 +232,11 @@ class TransferExecuteUnitTest extends TestCase
         $this
             ->mockedWalletService
             ->expects($this->exactly(2))
-            ->method('updateBalance');
+            ->method('updateBalance')
+            ->willReturnMap([
+                [$payer['uuid'], $payer['wallet']['balance'] - $transferValue],
+                [$payee['uuid'], $payee['wallet']['balance'] + $transferValue],
+            ]);;
 
         $this
             ->mockedTransferAuthorizer

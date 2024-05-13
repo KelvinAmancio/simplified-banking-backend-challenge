@@ -17,4 +17,14 @@ class TransferService
 
         return Transfer::create($walletAttributes)->toArray();
     }
+
+    public function updateTransferNotificationSent(
+        string $transferUuid,
+        array $notificationResult
+    ): bool {
+        return Transfer
+            ::query()
+            ->find($transferUuid)
+            ->update(['notification_sent' => !empty($notificationResult)]);
+    }
 }
