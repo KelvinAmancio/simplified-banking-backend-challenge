@@ -142,6 +142,8 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 
 ## Modelagem
 
+![Tabelas do banco MySQL](https://github.com/KelvinAmancio/simplified-banking-backend-challenge/assets/25416440/996fbd6d-93fd-48df-b2bf-5716bf185724)
+
 ## Rodando localmente
 
 Clone o projeto
