@@ -1,73 +1,71 @@
 
 # Simplified Banking Backend Challenge
+This is a repo for a Simplified Banking Backend Challenge.
 
-Este é um repositório para um desafio de backend de uma plataforma de pagamentos simplificada.
+## Requirements
 
+### FRs (Functional Requirements)
 
-## Funcionalidades
+- It should be possible to make money transfers between users
 
-### RFs (Requisitos Funcionais)
+- It should be possible to have two types of users (regular and merchant)
 
-- Deve ser possível realizar transferências de dinheiro entre usuários
+- It should be possible for users to have a wallet with money and make transfers between them
 
-- Deve ser possível ter 2 tipos de usuários (comuns e lojistas)
+- It should be possible for users to make transfers (send money) between them
 
-- Deve ser possível usuários terem carteira com dinheiro e realizam transferências entre eles
+### BRs (Business Rules)
 
-- Deve ser possível usuários realizarem transferências (enviar dinheiro) entre eles
-
-### RNs (Regras de Negócio)
-
-- Para ambos tipos de usuário devem existir os campos:
-    - nome
-    - cpf_cnpj
+- For both user types, the following fields must be present:
+    - name
+    - cpf_cnpj (document identification)
     - email
-    - senha
+    - password
 
-- Os seguintes campos devem ser únicos:
-    - cpf_cnpj
+- The following fields must be unique:
+    - cpf_cnpj (document identification)
     - email
 
-- Lojistas só devem receber transferências, não devem enviar dinheiro
+- Merchants should only receive transfers, not send money
 
-- Deve ser validado se o usuário tem saldo antes da transferência
+- It must be validated whether the user has a balance before the transfer
 
-- Antes de finalizar a transferência, deve-se consultar um serviço autorizador externo (API mock)
+- Before completing the transfer, an external authorizing service (mock API) must be consulted
 
-- A operação de transferência deve ser uma transação (revertida em caso de inconsistência)
+- The transfer operation must be a transaction (reversed in case of inconsistency)
 
-- No recebimento de pagamento, o usuário precisa receber notificação (email, sms) enviada por um serviço de terceiro (API mock)
+- Upon receipt of payment, the user must receive notification (email, SMS) sent by a third-party service (mock API)
 
-- Um usuário não deve enviar uma transferência para ele mesmo
+- A user should not send a transfer to themselves
 
-### RNFs (Requisitos Não-Funcionais)
+### NFRs (Non Functional Requirements)
 
-- O serviço implementado deve ser RESTFul
+- The implemented service must be RESTful
 
-- Deve ser utilizado token JWT para autenticação de usuários
+- A JWT token must be used for user authentication
 
-- Devem ser utilizadas migrations para gerar as tabelas do banco relacional (MySQL)
+- Migrations must be used to generate relational database tables (MySQL)
 
-- O envio de notificação (email, sms) deverá ser feito via event notification
+- Notifications (email, SMS) must be sent via event notification
 
-- Devem ser criadas as seguintes tabelas no banco relacional:
+- The following tables must be created in the relational database:
     - user
     - wallet
     - transfer
 
-## Documentação da API
+## API Documentation
 
-#### Login de usuário
+#### User Login
 
 ```http
   POST /login
   Content-Type: application/json
 ```
 
-| Parâmetro   | Tipo       | Descrição                           |
+| Param   | Type       | Description                           |
 | :---------- | :--------- | :---------------------------------- |
-| `email` | `string` | **Obrigatório**. Email do Usuário |
-| `password` | `string` | **Obrigatório**. Senha do Usuário |
+| `email` | `string` | **Required**. User Email |
+| `password` | `string` | **Required**. User Password |
 
 ```json
 {
@@ -75,19 +73,19 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 }
 ```
 
-#### Cadastro de usuário
+#### User Signup
 
 ```http
   POST /register
   Content-Type: application/json
 ```
 
-| Parâmetro   | Tipo       | Descrição                           |
+| Param   | Type       | Description                           |
 | :---------- | :--------- | :---------------------------------- |
-| `name` | `string` | **Obrigatório**. Nome do Usuário |
-| `email` | `string` | **Obrigatório**. Email do Usuário |
-| `cpf_cnpj` | `string` | **Obrigatório**. Documento do Usuário |
-| `password` | `string` | **Obrigatório**. Senha do Usuário |
+| `name` | `string` | **Required**. User Name |
+| `email` | `string` | **Required**. User Email |
+| `cpf_cnpj` | `string` | **Required**. User Doc |
+| `password` | `string` | **Required**. User Password |
 
 ```json
 {
@@ -111,17 +109,17 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 }
 ```
 
-#### Transferir dinheiro entre usuáris
+#### Make money transfers between users
 ```http
   POST /request
   Content-Type: application/json
 ```
 
-| Parâmetro   | Tipo       | Descrição                           |
+| Param   | Type       | Description                           |
 | :---------- | :--------- | :---------------------------------- |
-| `value` | `numeric` | **Obrigatório**. Valor da transferência |
-| `payee` | `string` | **Obrigatório**. Id do usuário que receberá o dinheiro |
-| `Authorization` | `string (header)` | **Obrigatório**. Token do usuário logado que enviará o dinheiro |
+| `value` | `numeric` | **Required**. Transfer Value |
+| `payee` | `string` | **Required**. ID of the user who will receive the money |
+| `Authorization` | `string (header)` | **Required**. Token of the logged-in user who will send the money |
 
 ```json
 {
@@ -138,32 +136,32 @@ Este é um repositório para um desafio de backend de uma plataforma de pagament
 }
 ```
 
-## Modelagem
+## Database Modeling
 
-![Tabelas do banco MySQL](https://github.com/KelvinAmancio/simplified-banking-backend-challenge/assets/25416440/996fbd6d-93fd-48df-b2bf-5716bf185724)
-[Issue com imagem](https://github.com/KelvinAmancio/simplified-banking-backend-challenge/issues/1#issue-2291737699)
+![MySQL Database Tables](https://github.com/KelvinAmancio/simplified-banking-backend-challenge/assets/25416440/996fbd6d-93fd-48df-b2bf-5716bf185724)
+[GitHub Issue containing the image](https://github.com/KelvinAmancio/simplified-banking-backend-challenge/issues/1#issue-2291737699)
 
-## Rodando localmente
+## Running Locally
 
-Clone o projeto
+Cloning the project
 
 ```bash
   git clone https://github.com/KelvinAmancio/simplified-banking-backend-challenge
 ```
 
-Entre no diretório do projeto
+Navigating to the project directory
 
 ```bash
   cd simplified-banking-backend-challenge
 ```
 
-Iniciar containers:
+Starting containers:
 
 ```bash
   make up
 ```
 
-Com os containers inciados, rodar em outro terminal:
+With containers running, run in another terminal:
 
 ```bash
   make exec
@@ -172,7 +170,7 @@ Com os containers inciados, rodar em outro terminal:
   vendo/bin/phpunit
 ```
 
-Para iniciar o servidor:
+Starting server:
 
 ```bash
   make exec
@@ -180,7 +178,7 @@ Para iniciar o servidor:
   make start
 ```
 
-Relatório de cobertura de teste:
+Running tests and obtaining coverage report:
 
 ```bash
   make exec
@@ -190,17 +188,16 @@ Relatório de cobertura de teste:
   make coverage-a
 ```
 
+## Improvements
 
-## Melhorias
+Endpoint proposals:
 
-Propostas de endpoint:
+-  GET /wallet (get wallet value for a logged in user)
+- GET /summary (get paginated transfer history of a logged in user)
 
--  GET /wallet (obter valor da carteira de um usuário logado)
-- GET /summary (obter histórico de transferências paginado de um usuário logado)
-## Stack utilizada
+## Tech Stack
 
 - [Hyperf Framework](https://hyperf.io/)
 - [Docker](https://www.docker.com/)
 - [MySQL](https://www.mysql.com/)
 - [Redis](https://redis.io/)
-
